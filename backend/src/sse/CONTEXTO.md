@@ -8,8 +8,8 @@ Esta carpeta contiene el administrador de **Server-Sent Events** (`sseManager.js
 
 | Archivo | Responsabilidad |
 |---|---|
-| [sseManager.js](file:///c:/Users/valeg/OneDrive/Escritorio/PROCOL/Prueba-PROCOL/backend/src/sse/sseManager.js) | Lógica de registro de sockets HTTP, control de desconexión y funciones para emitir mensajes (`broadcast` y `sendToUser`). |
-| [CONTEXTO.md](file:///c:/Users/valeg/OneDrive/Escritorio/PROCOL/Prueba-PROCOL/backend/src/sse/CONTEXTO.md) | Este archivo de documentación. |
+| [sseManager.js](./sseManager.js) | Lógica de registro de sockets HTTP, control de desconexión y funciones para emitir mensajes (`broadcast` y `sendToUser`). |
+| [CONTEXTO.md](./CONTEXTO.md) | Este archivo de documentación. |
 
 ## Lógica y Flujo Principal
 

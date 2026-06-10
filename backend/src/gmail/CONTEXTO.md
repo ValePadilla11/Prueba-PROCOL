@@ -8,8 +8,8 @@ Esta carpeta contiene el servicio para interactuar con la **Gmail API** (`gmailS
 
 | Archivo | Responsabilidad |
 |---|---|
-| [gmailService.js](file:///c:/Users/valeg/OneDrive/Escritorio/PROCOL/Prueba-PROCOL/backend/src/gmail/gmailService.js) | Lógica de consulta a la API de Gmail (listar mensajes, obtener detalles/cabeceras y formatearlos). |
-| [CONTEXTO.md](file:///c:/Users/valeg/OneDrive/Escritorio/PROCOL/Prueba-PROCOL/backend/src/gmail/CONTEXTO.md) | Este archivo de documentación. |
+| [gmailService.js](./gmailService.js) | Lógica de consulta a la API de Gmail (listar mensajes, obtener detalles/cabeceras y formatearlos). |
+| [CONTEXTO.md](./CONTEXTO.md) | Este archivo de documentación. |
 
 ## Lógica y Flujo Principal
 

@@ -21,8 +21,8 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware base
 app.use(cors({
-  origin: 'http://localhost:5173', // Frontend Vite
-  credentials: true,               // Permitir cookies de sesión
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // URL del Frontend
+  credentials: true,                                         // Permitir cookies de sesión
 }));
 app.use(express.json());
 

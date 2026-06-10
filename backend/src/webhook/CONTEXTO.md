@@ -8,8 +8,8 @@ Esta carpeta gestiona el endpoint del **Webhook** (`webhookRoutes.js`) que recib
 
 | Archivo | Responsabilidad |
 |---|---|
-| [webhookRoutes.js](file:///c:/Users/valeg/OneDrive/Escritorio/PROCOL/Prueba-PROCOL/backend/src/webhook/webhookRoutes.js) | Ruta `POST /webhook/gmail` que procesa los mensajes entrantes de Pub/Sub, registra las notificaciones y dispara las alertas SSE. |
-| [CONTEXTO.md](file:///c:/Users/valeg/OneDrive/Escritorio/PROCOL/Prueba-PROCOL/backend/src/webhook/CONTEXTO.md) | Este archivo de documentación. |
+| [webhookRoutes.js](./webhookRoutes.js) | Ruta `POST /webhook/gmail` que procesa los mensajes entrantes de Pub/Sub, registra las notificaciones y dispara las alertas SSE. |
+| [CONTEXTO.md](./CONTEXTO.md) | Este archivo de documentación. |
 
 ## El Ciclo de Notificación (Push Notification Flow)
 

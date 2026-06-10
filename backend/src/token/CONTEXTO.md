@@ -8,8 +8,8 @@ Esta carpeta contiene el servicio de gestión de tokens OAuth 2.0 (`tokenService
 
 | Archivo | Responsabilidad |
 |---|---|
-| [tokenService.js](file:///c:/Users/valeg/OneDrive/Escritorio/PROCOL/Prueba-PROCOL/backend/src/token/tokenService.js) | Lógica para verificar validez del token, renovar usando refresh_token y actualización de la BD SQLite. |
-| [CONTEXTO.md](file:///c:/Users/valeg/OneDrive/Escritorio/PROCOL/Prueba-PROCOL/backend/src/token/CONTEXTO.md) | Este archivo de documentación. |
+| [tokenService.js](./tokenService.js) | Lógica para verificar validez del token, renovar usando refresh_token y actualización de la BD SQLite. |
+| [CONTEXTO.md](./CONTEXTO.md) | Este archivo de documentación. |
 
 ## Lógica y Flujo Principal
 

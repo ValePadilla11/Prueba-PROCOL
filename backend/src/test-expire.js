@@ -15,7 +15,7 @@ async function run() {
     saveDb();
 
     console.log('[Test-Expire] ✅ Campo expires_at actualizado al pasado (2020-01-01) para todos los registros.');
-    console.log('[Test-Expire] Ahora puedes visitar http://localhost:3000/api/test-token y verificar que el token se renueva en la consola.');
+    console.log('[Test-Expire] Ahora puedes visitar http://localhost:3000/api/emails (o recargar el frontend) y verificar que el token se renueva en la consola.');
     process.exit(0);
   } catch (error) {
     console.error('[Test-Expire] ❌ Error:', error);

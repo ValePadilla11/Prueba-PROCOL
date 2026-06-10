@@ -118,7 +118,7 @@ router.get('/callback', async (req, res) => {
     }
 
     // 8. Redirigir al frontend
-    res.redirect('http://localhost:5173');
+    res.redirect(process.env.FRONTEND_URL || 'http://localhost:5173');
 
   } catch (error) {
     console.error('[Auth] Error en callback:', error.message);
