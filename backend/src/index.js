@@ -1,15 +1,17 @@
 // backend/src/index.js
 // Entry point del backend — servidor Express
-// Fase 2: agrega express-session y rutas de autenticación OAuth 2.0
+// Fase 3: agrega cron job de renovación automática y endpoint de prueba de tokens
 
 require('dotenv').config({ path: require('path').join(__dirname, '..', '..', '.env') });
 
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const cron = require('node-cron');
 const { initDatabase } = require('./database/db');
 const { runMigrations } = require('./database/migrations');
 const authRoutes = require('./auth/authRoutes');
+const { refreshExpiringTokens, getValidToken } = require('./token/tokenService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -36,9 +38,39 @@ app.use(session({
 // Rutas de autenticación
 app.use('/auth', authRoutes);
 
+// Ruta temporal de verificación para la Fase 3
+app.get('/api/test-token', async (req, res) => {
+  if (!req.session || !req.session.userId) {
+    return res.status(401).json({ error: 'No autorizado. Inicie sesión primero en /auth/google' });
+  }
+
+  try {
+    const token = await getValidToken(req.session.userId);
+    res.json({
+      valid: true,
+      userId: req.session.userId,
+      email: req.session.email,
+      accessToken: token ? `${token.substring(0, 10)}...` : null
+    });
+  } catch (error) {
+    console.error('[API] Error al obtener token válido:', error.message);
+    res.status(500).json({ error: 'Error al obtener token válido', details: error.message });
+  }
+});
+
 // Health check
 app.get('/', (req, res) => {
   res.json({ status: 'ok', message: 'PROCOL Gmail Reader — Backend activo' });
+});
+
+// Programar cron job de renovación preventiva (cada 30 minutos)
+cron.schedule('*/30 * * * *', async () => {
+  console.log('[Cron] Iniciando renovación preventiva de tokens...');
+  try {
+    await refreshExpiringTokens();
+  } catch (error) {
+    console.error('[Cron] Error en la renovación preventiva:', error.message);
+  }
 });
 
 // Inicio asíncrono: inicializar BD → migraciones → levantar servidor
@@ -49,6 +81,7 @@ async function start() {
 
     app.listen(PORT, () => {
       console.log(`[Server] Backend corriendo en http://localhost:${PORT}`);
+      console.log('[Cron] Job de renovación preventiva registrado (cada 30 minutos)');
     });
   } catch (error) {
     console.error('[Server] Error al iniciar:', error);
@@ -57,3 +90,4 @@ async function start() {
 }
 
 start();
+

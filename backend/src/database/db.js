@@ -9,13 +9,14 @@ const path = require('path');
 const DB_PATH = path.join(__dirname, '..', '..', 'database.sqlite');
 
 let db = null;
+let SQL = null; // Cache de sql.js para poder recrear la DB
 
 /**
  * Inicializa sql.js y carga (o crea) la base de datos.
  * Debe llamarse una vez al arrancar el servidor.
  */
 async function initDatabase() {
-  const SQL = await initSqlJs();
+  SQL = await initSqlJs();
 
   if (fs.existsSync(DB_PATH)) {
     const buffer = fs.readFileSync(DB_PATH);
@@ -44,6 +45,23 @@ function getDb() {
 }
 
 /**
+ * Recarga la base de datos desde el archivo en disco.
+ * Útil para sincronizar la copia en memoria si el archivo en disco fue modificado externamente.
+ */
+function reloadDb() {
+  if (!SQL) {
+    console.warn('[DB] SQL no inicializado, no se puede recargar.');
+    return;
+  }
+  if (fs.existsSync(DB_PATH)) {
+    const buffer = fs.readFileSync(DB_PATH);
+    db = new SQL.Database(buffer);
+    db.run('PRAGMA foreign_keys = ON');
+    // console.log(`[DB] Base de datos recargada desde disco: ${DB_PATH}`);
+  }
+}
+
+/**
  * Guarda la base de datos en disco.
  * Llamar después de operaciones de escritura (INSERT, UPDATE, DELETE).
  */
@@ -55,4 +73,4 @@ function saveDb() {
   }
 }
 
-module.exports = { initDatabase, getDb, saveDb };
+module.exports = { initDatabase, getDb, reloadDb, saveDb };
