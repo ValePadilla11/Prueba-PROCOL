@@ -13,6 +13,7 @@ const { runMigrations } = require('./database/migrations');
 const authRoutes = require('./auth/authRoutes');
 const { refreshExpiringTokens } = require('./token/tokenService');
 const { getRecentEmails } = require('./gmail/gmailService');
+const { registerClient } = require('./sse/sseManager');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -53,6 +54,9 @@ app.get('/api/emails', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener correos', details: error.message });
   }
 });
+
+// Canal SSE para recibir notificaciones en tiempo real (Fase 5)
+app.get('/events', registerClient);
 
 // Health check
 app.get('/', (req, res) => {
