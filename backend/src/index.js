@@ -11,6 +11,7 @@ const cron = require('node-cron');
 const { initDatabase } = require('./database/db');
 const { runMigrations } = require('./database/migrations');
 const authRoutes = require('./auth/authRoutes');
+const webhookRoutes = require('./webhook/webhookRoutes');
 const { refreshExpiringTokens } = require('./token/tokenService');
 const { getRecentEmails } = require('./gmail/gmailService');
 const { registerClient } = require('./sse/sseManager');
@@ -39,6 +40,9 @@ app.use(session({
 
 // Rutas de autenticación
 app.use('/auth', authRoutes);
+
+// Rutas de webhook para Pub/Sub (Fase 6)
+app.use('/webhook', webhookRoutes);
 
 // Ruta GET /api/emails — Obtiene los correos recientes de Gmail (Fase 4)
 app.get('/api/emails', async (req, res) => {

@@ -91,4 +91,35 @@ async function getRecentEmails(userId) {
   return emailDetails;
 }
 
-module.exports = { getRecentEmails };
+/**
+ * Registra el canal de notificaciones Push (watch) en Gmail para un usuario.
+ * @param {number} userId - ID del usuario en la base de datos
+ * @returns {Promise<object>} Datos del registro del watch (historyId, expiration)
+ */
+async function setupWatch(userId) {
+  // 1. Obtener access_token válido
+  const accessToken = await getValidToken(userId);
+
+  // 2. Configurar las credenciales en el cliente OAuth2
+  const oauth2Client = createOAuth2Client();
+  oauth2Client.setCredentials({ access_token: accessToken });
+
+  // 3. Crear cliente para la API de Gmail
+  const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+
+  console.log(`[Gmail] Registrando watch (notificaciones push) para el usuario ${userId}...`);
+
+  // 4. Llamar a users.watch
+  const response = await gmail.users.watch({
+    userId: 'me',
+    requestBody: {
+      topicName: process.env.PUBSUB_TOPIC, // Tema de Cloud Pub/Sub
+      labelIds: ['INBOX'], // Solo escuchar cambios en INBOX
+    },
+  });
+
+  console.log(`[Gmail] Watch registrado con éxito para ${userId}. Respuesta:`, response.data);
+  return response.data;
+}
+
+module.exports = { getRecentEmails, setupWatch };

@@ -108,6 +108,15 @@ router.get('/callback', async (req, res) => {
 
     console.log(`[Auth] Login exitoso — userId: ${userId}, email: ${userInfo.email}`);
 
+    // Registrar el watch (notificaciones push) en Gmail (Fase 6)
+    try {
+      const { setupWatch } = require('../gmail/gmailService');
+      await setupWatch(userId);
+    } catch (watchError) {
+      console.error('[Auth] Error registrando watch de Gmail:', watchError.message);
+      // No bloqueamos la redirección ni el inicio de sesión
+    }
+
     // 8. Redirigir al frontend
     res.redirect('http://localhost:5173');
 
