@@ -11,7 +11,8 @@ const cron = require('node-cron');
 const { initDatabase } = require('./database/db');
 const { runMigrations } = require('./database/migrations');
 const authRoutes = require('./auth/authRoutes');
-const { refreshExpiringTokens, getValidToken } = require('./token/tokenService');
+const { refreshExpiringTokens } = require('./token/tokenService');
+const { getRecentEmails } = require('./gmail/gmailService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,23 +39,18 @@ app.use(session({
 // Rutas de autenticación
 app.use('/auth', authRoutes);
 
-// Ruta temporal de verificación para la Fase 3
-app.get('/api/test-token', async (req, res) => {
+// Ruta GET /api/emails — Obtiene los correos recientes de Gmail (Fase 4)
+app.get('/api/emails', async (req, res) => {
   if (!req.session || !req.session.userId) {
     return res.status(401).json({ error: 'No autorizado. Inicie sesión primero en /auth/google' });
   }
 
   try {
-    const token = await getValidToken(req.session.userId);
-    res.json({
-      valid: true,
-      userId: req.session.userId,
-      email: req.session.email,
-      accessToken: token ? `${token.substring(0, 10)}...` : null
-    });
+    const emails = await getRecentEmails(req.session.userId);
+    res.json({ status: 'ok', emails });
   } catch (error) {
-    console.error('[API] Error al obtener token válido:', error.message);
-    res.status(500).json({ error: 'Error al obtener token válido', details: error.message });
+    console.error('[API] Error al obtener correos:', error.message);
+    res.status(500).json({ error: 'Error al obtener correos', details: error.message });
   }
 });
 
